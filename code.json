@@ -1,0 +1,211 @@
+[
+  {
+    "step": 2,
+    "provider": "workato_recipe_function",
+    "name": "call_recipe_async",
+    "as": "step_2",
+    "keyword": "action",
+    "input": {
+      "flow_id": "40127960",
+      "parameters": {
+        "Billing_Entries": {
+          "____source": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount')}",
+          "Salesforce_Id": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Salesforce_Object_Id')}",
+          "Customer_Name": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Customer_Name')}",
+          "Entity_Number": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Enity_Number')}",
+          "Oracle_Account_Id": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Oracle_Account_ID')}",
+          "Site_Number": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Oracle_Site_ID')}",
+          "Business_Line": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Business_line')}",
+          "Oracle_Contact_Id": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Oracle_Contact_Id')}",
+          "Status": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Oracle_Integration_Status')}",
+          "Integration_Message": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Integration_Message')}",
+          "Job_Link": "#{_('data.workato.job_context.job_url')}",
+          "Date_Added": "=now.in_time_zone(\"Asia/Singapore\")"
+        }
+      }
+    }
+  },
+  {
+    "step": 3,
+    "as": "step_3",
+    "keyword": "try",
+    "input": {
+      
+    }
+  },
+  {
+    "step": 4,
+    "as": "step_4",
+    "keyword": "if",
+    "input": {
+      "type": "compound",
+      "operand": "or",
+      "conditions": [
+        {
+          "operand": "equals_to",
+          "lhs": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Oracle_Integration_Status')}",
+          "rhs": "#{_('data.workato.job_context.account_properties.SF_Status_Rejected', 'account_property', 'SF_Status_Rejected')}",
+          "uuid": "condition-66940c72-f735-45f6-abcd-43293a9b9a80"
+        },
+        {
+          "operand": "equals_to",
+          "lhs": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Oracle_Integration_Status')}",
+          "rhs": "#{_('data.workato.job_context.account_properties.SF_Status_Success', 'account_property', 'SF_Status_Success')}",
+          "uuid": "condition-3bf6c3d4-043d-41d4-bfab-11bb520566e9"
+        }
+      ]
+    }
+  },
+  {
+    "step": 5,
+    "provider": "workato_recipe_function",
+    "name": "call_recipe_async",
+    "as": "step_5",
+    "keyword": "action",
+    "input": {
+      "flow_id": "3424666",
+      "parameters": {
+        "IntegrationMessage": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Integration_Message')}",
+        "SalesforceId": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Salesforce_Object_Id')}",
+        "Status": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Oracle_Integration_Status')}",
+        "CustomerName": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Customer_Name')}",
+        "RecordType": "=_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Business_line').present? ? (_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Business_line').strip.upcase == 'ADS' ? 'ADS' : 'FFB') : \" \"",
+        "RejectedBy": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.RejectedBy')}",
+        "Country": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Country')}",
+        "EntityNumber": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Enity_Number')}"
+      }
+    }
+  },
+  {
+    "step": 6,
+    "as": "step_6",
+    "keyword": "catch",
+    "input": {
+      "max_retry_count": "0",
+      "retry_interval": "2"
+    }
+  },
+  {
+    "step": 7,
+    "as": "step_7",
+    "keyword": "try",
+    "input": {
+      
+    }
+  },
+  {
+    "step": 8,
+    "provider": "salesforce",
+    "name": "update_sobject",
+    "as": "step_8",
+    "keyword": "action",
+    "input": {
+      "sobject_name": "Billing_Account__c",
+      "id": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Salesforce_Object_Id')}",
+      "Integration_Message__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Integration_Message')}",
+      "Oracle_Account_ID__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Oracle_Account_ID')}",
+      "Oracle_Integration_Status__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Oracle_Integration_Status')}",
+      "Oracle_Site_ID__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Oracle_Site_ID')}",
+      "Oracle_Contact_ID__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Oracle_Contact_Id')}",
+      "Account_Description__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Account_Description')}",
+      "CWT_Rate__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.CWT_Rate')}",
+      "Site_Purpose_to_Date__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Site_Purpose_to_Date')}",
+      "Account_Status__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Account_Status')}",
+      "Account_Site_Status__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Account_Status')}",
+      "Account_Termination_Date__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Account_Termination_Date')}",
+      "E_Invoice_Business_Unit__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.E_Invoice_Business_Unit')}",
+      "Bank_Virtual_Account_Name__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Bank_Virtual_Account_Name')}",
+      "Bank_Virtual_Account_Number__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Bank_Virtual_Account_Number')}",
+      "Billing_Address_City__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Billing_Address_City')}",
+      "Billing_Address_Line_1__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Billing_Address_Line_1')}",
+      "Billing_Address_Line_2__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Billing_Address_Line_2')}",
+      "Billing_Address_Postal_Code__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Billing_Address_Postal_Code')}",
+      "Billing_Address_State_Province__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Billing_Address_State_Province')}",
+      "Billing_Entity_Legal_Name__c": "#{_('data.workato_recipe_function.d60da67e.parameters.BillingAccount.first.Billing_Entity_Legal_Name')}",
+      "Integration_Date__c": "=now.in_time_zone(\"Etc/UTC\").strftime(\"%Y%m%d%H%M%S\")"
+    }
+  },
+  {
+    "step": 9,
+    "provider": "workato_recipe_function",
+    "name": "return_result",
+    "as": "step_9",
+    "keyword": "action",
+    "input": {
+      "result": {
+        "Success": "true"
+      }
+    }
+  },
+  {
+    "step": 10,
+    "as": "step_10",
+    "keyword": "stop",
+    "input": {
+      "stop_with_error": "false"
+    }
+  },
+  {
+    "step": 11,
+    "as": "step_11",
+    "keyword": "catch",
+    "input": {
+      "max_retry_count": "3",
+      "retry_interval": "2"
+    }
+  },
+  {
+    "step": 12,
+    "as": "step_12",
+    "keyword": "if",
+    "input": {
+      "type": "compound",
+      "operand": "and",
+      "conditions": [
+        {
+          "operand": "is_true",
+          "lhs": "#{_('data.workato_recipe_function.d60da67e.parameters.StopJobWithError')}",
+          "rhs": "",
+          "uuid": "condition-a7075a93-4987-493b-84c0-b7b2b629257a"
+        }
+      ]
+    }
+  },
+  {
+    "step": 13,
+    "as": "step_13",
+    "keyword": "stop",
+    "input": {
+      "stop_with_error": "true",
+      "stop_reason": "#{_('data.catch.step_11.message')}"
+    }
+  },
+  {
+    "step": 14,
+    "as": "step_14",
+    "keyword": "else",
+    "input": {
+      
+    }
+  },
+  {
+    "step": 15,
+    "provider": "workato_recipe_function",
+    "name": "return_result",
+    "as": "step_15",
+    "keyword": "action",
+    "input": {
+      "result": {
+        "Success": "false"
+      }
+    }
+  },
+  {
+    "step": 16,
+    "as": "step_16",
+    "keyword": "stop",
+    "input": {
+      "stop_with_error": "false"
+    }
+  }
+]
